@@ -1,0 +1,90 @@
+1  SELECT Orders.OrderID, Orders.OrderDate, Customers.CustomerName, Customers.City, Customers.Address, Customers.PostalCode, Shippers.ShipperName, Products.ProductName, OrderDetails.Quantity
+FROM Orders
+INNER JOIN Customers
+ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Shippers
+ON Orders.ShipperID = Shippers.ShipperID
+INNER JOIN OrderDetails
+ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products
+ON OrderDetails.ProductID = Products.ProductID;
+
+
+
+
+
+2  SELECT DISTINCT Products.ProductName, Shippers.ShipperName
+FROM Products
+INNER JOIN OrderDetails ON Products.ProductID = OrderDetails.ProductID
+INNER JOIN Orders ON OrderDetails.OrderID = Orders.OrderID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+
+
+
+3  SELECT Shippers.ShipperName, COUNT(OrderDetails.ProductID) AS 'Product Count'
+FROM Shippers
+INNER JOIN Orders ON Shippers.ShipperID = Orders.ShipperID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+GROUP BY Shippers.ShipperName;
+
+
+
+
+4  SELECT COUNT(*)
+FROM Customers
+WHERE CustomerName NOT LIKE '%son%';
+
+
+
+
+5  SELECT SUM(OrderDetails.Quantity * OrderDetails.UnitPrice) AS 'Total Sales'
+FROM Orders
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+WHERE YEAR(Orders.OrderDate) = 1997;
+
+
+
+
+6  SELECT Suppliers.CompanyName, COUNT(OrderDetails.ProductID) AS 'Product Count'
+FROM Suppliers
+INNER JOIN Products ON Suppliers.SupplierID = Products.SupplierID
+INNER JOIN OrderDetails ON Products.ProductID = OrderDetails.ProductID
+GROUP BY Suppliers.CompanyName
+ORDER BY 'Product Count' DESC
+LIMIT 1;
+
+
+
+
+7  SELECT Products.ProductName, SUM(OrderDetails.Quantity * OrderDetails.UnitPrice) AS 'Total Sales'
+FROM Products
+INNER JOIN OrderDetails ON Products.ProductID = OrderDetails.ProductID
+GROUP BY Products.ProductName
+ORDER BY 'Total Sales' DESC;
+
+
+
+8  SELECT DATE_FORMAT(Orders.OrderDate, '%Y-%m') AS 'Month', SUM(OrderDetails.Quantity * OrderDetails.UnitPrice) AS 'Total Sales'
+FROM Orders
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+GROUP BY DATE_FORMAT(Orders.OrderDate, '%Y-%m')
+ORDER BY 'Total Sales' DESC
+LIMIT 1;
+
+
+
+9  SELECT DATE(Orders.OrderDate) AS 'Date', SUM(OrderDetails.Quantity * OrderDetails.UnitPrice) AS 'Total Sales'
+FROM Orders
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+GROUP BY DATE(Orders.OrderDate)
+ORDER BY 'Date';
+
+
+10  SELECT Customers.CustomerID, IFNULL(SUM(OrderDetails.Quantity * OrderDetails.UnitPrice), 0) AS 'Total Sales'
+FROM Customers
+LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+LEFT JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+GROUP BY Customers.CustomerID;
+
+
