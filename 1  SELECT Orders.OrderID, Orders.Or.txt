@@ -38,7 +38,7 @@ WHERE CustomerName NOT LIKE '%son%';
 
 
 
-5  SELECT SUM(OrderDetails.Quantity * OrderDetails.UnitPrice) AS 'Total Sales'
+5  SELECT SUM(OrderDetails.Quantity * products.price) AS 'Total Sales'
 FROM Orders
 INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
 WHERE YEAR(Orders.OrderDate) = 1997;
